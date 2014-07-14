@@ -6,7 +6,8 @@
  *
  * Version: 1.4.2
  *
- * Author: John Gardner
+ * Author: Flower7C3
+ * Org Author: John Gardner
  * Author URI: http://arconixpc.com/
  *
  * License: GNU General Public License v2.0

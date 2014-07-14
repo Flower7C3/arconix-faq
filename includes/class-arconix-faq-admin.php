@@ -14,7 +14,7 @@ class Arconix_FAQ_Admin {
 
         add_action( 'init',                         array( $this, 'content_types' ) );
         add_action( 'init',                         array( $this, 'init' ), 9999 );
-        add_action( 'wp_enqueue_scripts',           array( $this, 'enq_scripts' ) );
+//        add_action( 'wp_enqueue_scripts',           array( $this, 'enq_scripts' ) );
         add_action( 'admin_enqueue_scripts',        array( $this, 'enq_admin_scripts' ) );
         add_action( 'manage_posts_custom_column',   array( $this, 'column_action' ) );
         add_action( 'dashboard_glance_items',       array( $this, 'at_a_glance' ) );
