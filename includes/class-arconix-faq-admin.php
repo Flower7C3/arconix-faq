@@ -226,43 +226,6 @@ class Arconix_FAQ_Admin {
 
 
     /**
-     * Register the necessary Javascript and CSS, which can be overridden in a couple different ways.
-     *
-     * If you would like to bundle the Javacsript or CSS funtionality into another file and prevent either of the plugin's
-     * JS or CSS from loading at all, return false to whichever of the pre_register filters you wish to override
-     *
-     * @example add_filter( 'pre_register_arconix_faq_js', '__return_false' );
-     *
-     * If you'd like to use your own JS or CSS file, you can copy the arconix-faq.js or arconix-faq.css files to the
-     * root of your theme's folder. That will be loaded in place of the plugin's version, which means you can modify
-     * it to your heart's content and know the file will be safe when the plugin is updated in the future.
-     *
-     * @since 1.2.0
-     */
-    function enq_scripts() {
-        // Register the javascript - Check the theme directory first, the parent theme (if applicable) second, otherwise load the plugin file
-        if( apply_filters( 'pre_register_arconix_faq_js', true ) ) {
-            if( file_exists( get_stylesheet_directory() . '/arconix-faq.js' ) )
-                wp_register_script( 'arconix-faq-js', get_stylesheet_directory_uri() . '/arconix-faq.js', array( 'jquery' ), ACFAQ_VERSION );
-            elseif( file_exists( get_template_directory() . '/arconix-faq.js' ) )
-                wp_register_script( 'arconix-faq-js', get_template_directory_uri() . '/arconix-faq.js', array( 'jquery' ), ACFAQ_VERSION );
-            else
-                wp_register_script( 'arconix-faq-js', ACFAQ_URL . 'js/arconix-faq.js', array( 'jquery' ), ACFAQ_VERSION );
-        }
-
-        // Load the CSS - Check the theme directory first, the parent theme (if applicable) second, otherwise load the plugin file
-        if( apply_filters( 'pre_register_arconix_faq_css', true ) ) {
-            if( file_exists( get_stylesheet_directory() . '/arconix-faq.css' ) )
-                wp_enqueue_style( 'arconix-faq', get_stylesheet_directory_uri() . '/arconix-faq.css', false, ACFAQ_VERSION );
-            elseif( file_exists( get_template_directory() . '/arconix-faq.css' ) )
-                wp_enqueue_style( 'arconix-faq', get_template_directory_uri() . '/arconix-faq.css', false, ACFAQ_VERSION );
-            else
-                wp_enqueue_style( 'arconix-faq', ACFAQ_URL . 'css/arconix-faq.css', false, ACFAQ_VERSION );
-        }
-
-    }
-
-    /**
      * Includes admin scripts. Use the pre_register filter if you'd like to prevent the file from being loaded
      *
      * @since 1.2.0
