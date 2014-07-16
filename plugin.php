@@ -7,7 +7,7 @@
  *
  * Version: 1.4.2
  *
- * Author: Flower7C3
+ * Author: Bartłomiej Jakub Kwiatek
  * Author URI: http://kwiatek.pro
  * Org Author: John Gardner
  * Org Author URI: http://arconixpc.com/
