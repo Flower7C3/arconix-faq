@@ -34,7 +34,10 @@ class Arconix_FAQ {
         # Container
         $return = '';
         # Get the taxonomy terms assigned to all FAQs
-        $terms = get_terms('group');
+        $terms = get_terms('group', array(
+            'orderby' => 'slug',
+            'order' => 'ASC',
+        ));
         # If there are any terms being used, loop through each one to output the relevant FAQ's, else just output all FAQs
         if (!empty($terms)) {
             foreach ($terms as $term) {
