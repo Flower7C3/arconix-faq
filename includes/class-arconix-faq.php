@@ -75,10 +75,10 @@ class Arconix_FAQ {
                         $rtt = get_post_meta(get_the_id(), '_acf_rtt', true);
                         $lo = get_post_meta(get_the_id(), '_acf_open', true);
                         $open = empty($lo) ? '' : ' in';
-                        $link = 'faq-' . sanitize_title(get_the_title());
+                        $link = 'faq-' . $term->slug . '-' . sanitize_title(get_the_title());
                         $return .= '<li class="panel" id="' . $link . '">';
-                        $return .= '<div class="panel-heading"><a href="#faq-' . get_the_ID() . '" data-toggle="collapse" data-parent="#faq-' . $term->slug . '">' . get_the_title() . '</a></div>';
-                        $return .= '<div id="faq-' . get_the_ID() . '" class="panel-body collapse ' . $open . '">';
+                        $return .= '<div class="panel-heading"><a href="#faq-' . $term->slug . '-' . get_the_ID() . '" data-toggle="collapse" data-parent="#faq-' . $term->slug . '">' . get_the_title() . '</a></div>';
+                        $return .= '<div id="faq-' . $term->slug . '-' . get_the_ID() . '" class="panel-body collapse ' . $open . '">';
                         $return .= '<div class="panel-inner">';
                         $return .= apply_filters('the_content', get_the_content());
                         if ($rtt) {
