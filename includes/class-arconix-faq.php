@@ -46,7 +46,7 @@ class Arconix_FAQ {
                 if (isset($group) and $group != '' and $term->slug != $group)
                     continue;
                 # Set up our standard query args.
-                $query_args = array(
+                $q = new WP_Query(array(
                     'post_type' => 'faq',
                     'order' => $args['order'],
                     'orderby' => $args['orderby'],
@@ -60,37 +60,14 @@ class Arconix_FAQ {
                             'operator' => 'IN'
                         )
                     )
-                );
-                # New query just for the tax term we're looping through
-                $q = new WP_Query($query_args);
+                ));
                 if ($q->have_posts()) {
-                    $return .= '<h3 id="faq-term-' . $term->slug . '">' . $term->name . '</h3>';
+                    $parentID = 'faq-' . $term->slug;
+                    $return .= '<h3 id="' . $parentID . '-header">' . $term->name . '</h3>';
                     # If the term has a description, show it
                     if ($term->description)
                         $return .= '<p class="arconix-faq-term-description">' . $term->description . '</p>';
-                    # Loop through the rest of the posts for the term
-                    $return .= '<ol id="faq-' . $term->slug . '" class="panel-group">';
-                    while ($q->have_posts()) : $q->the_post();
-                        # Grab our metadata
-                        $rtt = get_post_meta(get_the_id(), '_acf_rtt', true);
-                        $lo = get_post_meta(get_the_id(), '_acf_open', true);
-                        $open = empty($lo) ? '' : ' in';
-                        $link = 'faq-' . $term->slug . '-' . sanitize_title(get_the_title());
-                        $return .= '<li class="panel" id="' . $link . '">';
-                        $return .= '<div class="panel-heading"><a href="#faq-' . $term->slug . '-' . get_the_ID() . '" data-toggle="collapse" data-parent="#faq-' . $term->slug . '">' . get_the_title() . '</a></div>';
-                        $return .= '<div id="faq-' . $term->slug . '-' . get_the_ID() . '" class="panel-body collapse ' . $open . '">';
-                        $return .= '<div class="panel-inner">';
-                        $return .= apply_filters('the_content', get_the_content());
-                        if ($rtt) {
-                            $rtt_text = __('Return to Top', 'acf');
-                            $rtt_text = apply_filters('arconix_faq_return_to_top_text', $rtt_text);
-                            $return .= '<a href="#' . $link . '">' . $rtt_text . '</a>';
-                        }
-                        $return .= '</div>';
-                        $return .= '</div>';
-                        $return .= '</li>';
-                    endwhile;
-                    $return .= '</ol>';
+                    $return .= self::theLoop($q, $parentID);
                 } # end have_posts()
                 wp_reset_postdata();
             } # end foreach
@@ -105,28 +82,7 @@ class Arconix_FAQ {
                 'nopaging' => $args['nopaging'],
             ));
             if ($q->have_posts()) {
-                $return .= '<ol id="faq" class="panel-group">';
-                while ($q->have_posts()) : $q->the_post();
-                    # Grab our metadata
-                    $rtt = get_post_meta(get_the_id(), '_acf_rtt', true);
-                    $lo = get_post_meta(get_the_id(), '_acf_open', true);
-                    $open = empty($lo) ? '' : ' in';
-                    $link = 'faq-' . sanitize_title(get_the_title());
-                    $return .= '<li class="panel" id="' . $link . '">';
-                    $return .= '<div class="panel-heading"><a href="#faq-' . get_the_ID() . '" data-toggle="collapse" data-parent="#faq">' . get_the_title() . '</a></div>';
-                    $return .= '<div id="faq-' . get_the_ID() . '" class="panel-body collapse ' . $open . '">';
-                    $return .= '<div class="panel-inner">';
-                    $return .= apply_filters('the_content', get_the_content());
-                    if ($rtt) {
-                        $rtt_text = __('Return to Top', 'acf');
-                        $rtt_text = apply_filters('arconix_faq_return_to_top_text', $rtt_text);
-                        $return .= '<a href="#' . $link . '">' . $rtt_text . '</a>';
-                    }
-                    $return .= '</div>';
-                    $return .= '</div>';
-                    $return .= '</li>';
-                endwhile;
-                $return .= '</ol>';
+                $return = self::theLoop($q);
             } # end have_posts()
             wp_reset_postdata();
         }
@@ -138,6 +94,35 @@ class Arconix_FAQ {
             echo $return;
         else
             return $return;
+    }
+
+    private function theLoop($q = null, $parentID = 'faq') {
+        $return = '';
+        $return .= '<ol id="' . $parentID . '" class="panel-group">';
+        while ($q->have_posts()) {
+            $q->the_post();
+            # Grab our metadata
+            $lo = get_post_meta(get_the_id(), '_acf_open', true);
+            $open = empty($lo) ? '' : ' in';
+            $itemID = $parentID . '-item-' . sanitize_title(get_the_title());
+            $itemLink = $parentID . '-item-' . get_the_ID();
+            # generate return
+            $return .= '<li class="panel" id="' . $itemID . '">';
+            $return .= '<div class="panel-heading"><a href="#' . $itemLink . '" data-toggle="collapse" data-parent="#' . $parentID . '">' . get_the_title() . '</a></div>';
+            $return .= '<div id="' . $itemLink . '" class="panel-body collapse ' . $open . '">';
+            $return .= '<div class="panel-inner">';
+            $return .= apply_filters('the_content', get_the_content());
+            if (get_post_meta(get_the_id(), '_acf_rtt', true)) {
+                $rtt_text = __('Return to Top', 'acf');
+                $rtt_text = apply_filters('arconix_faq_return_to_top_text', $rtt_text);
+                $return .= '<a href="#' . $itemID . '">' . $rtt_text . '</a>';
+            }
+            $return .= '</div>';
+            $return .= '</div>';
+            $return .= '</li>';
+        }
+        $return .= '</ol>';
+        return $return;
     }
 
 }
