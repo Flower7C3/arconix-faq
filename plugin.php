@@ -5,7 +5,7 @@
  * Org Plugin URI: http://arconixpc.com/plugins/arconix-faq
  * Description: Plugin to handle the display of FAQs
  *
- * Version: 1.4.2
+ * Version: 1.4.3
  *
  * Author: Bartłomiej Jakub Kwiatek
  * Author URI: http://kwiatek.pro
